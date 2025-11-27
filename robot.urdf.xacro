@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot name="diff_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include component macros -->
+  <xacro:include filename="components.xacro"/>
+  <xacro:include filename="gazebo_control.xacro"/>
+
+  <!-- Dimensions -->
+  <xacro:property name="chassis_length" value="0.5"/>
+  <xacro:property name="chassis_width"  value="0.35"/>
+  <xacro:property name="chassis_height" value="0.10"/>
+
+  <xacro:property name="wheel_radius"   value="0.08"/>
+  <xacro:property name="wheel_width"    value="0.03"/>
+  <xacro:property name="caster_radius"  value="0.05"/>
+
+  <!-- Base link -->
+  <link name="base_link"/>
+
+  <!-- Chassis -->
+  <xacro:chassis 
+      name="chassis_link"
+      length="${chassis_length}"
+      width="${chassis_width}"
+      height="${chassis_height}"/>
+
+  <joint name="base_to_chassis" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Left wheel -->
+  <xacro:wheel name="left_wheel_link" radius="${wheel_radius}" width="${wheel_width}"/>
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="chassis_link"/>
+    <child link="left_wheel_link"/>
+    <origin xyz="-0.2 ${chassis_width/2} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Right wheel -->
+  <xacro:wheel name="right_wheel_link" radius="${wheel_radius}" width="${wheel_width}"/>
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="chassis_link"/>
+    <child link="right_wheel_link"/>
+    <origin xyz="-0.2 -${chassis_width/2} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Caster wheel -->
+  <xacro:caster name="caster_link" radius="${caster_radius}"/>
+  <joint name="caster_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="caster_link"/>
+    <origin xyz="0.18 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>
+
